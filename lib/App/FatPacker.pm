@@ -13,7 +13,7 @@ use File::Copy qw(copy);
 use File::Path qw(make_path remove_tree);
 use B qw(perlstring);
 
-our $VERSION = '0.009001'; # 0.9.1
+our $VERSION = '0.009002'; # 0.9.2
 
 $VERSION = eval $VERSION;
 
@@ -47,12 +47,16 @@ sub new { bless({}, $_[0]) }
 sub run_script {
   my ($self, $args) = @_;
   my @args = $args ? @$args : @ARGV;
-  (my $cmd = shift @args) =~ s/-/_/g;
+  (my $cmd = shift @args || 'help') =~ s/-/_/g;
   if (my $meth = $self->can("script_command_${cmd}")) {
     $self->$meth(\@args);
   } else {
     die "No such command ${cmd}";
   }
+}
+
+sub script_command_help {
+  print "Try `perldoc fatpack` for how to use me\n";
 }
 
 sub script_command_trace {
@@ -192,8 +196,8 @@ App::FatPacker - pack your dependencies onto your script file
 =head1 SYNOPSIS
 
   $ fatpack trace myscript.pl
-  $ fatpack packlists-for `cat factpacker.trace` >packlists
-  $ fatpack tree fatlib `cat packlists`
+  $ fatpack packlists-for `cat fatpacker.trace` >packlists
+  $ fatpack tree `cat packlists`
   $ (fatpack file; cat myscript.pl) >myscript.packed.pl
 
 See the documentation for the L<fatpack> script itself for more information.
