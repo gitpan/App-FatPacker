@@ -13,7 +13,7 @@ use File::Copy qw(copy);
 use File::Path qw(make_path remove_tree);
 use B qw(perlstring);
 
-our $VERSION = '0.009003'; # 0.9.3
+our $VERSION = '0.009004'; # 0.9.4
 
 $VERSION = eval $VERSION;
 
@@ -171,7 +171,8 @@ sub script_command_file {
 
     unshift @INC, sub {
       if (my $fat = $fatpacked{$_[1]}) {
-        open my $fh, '<', \$fat;
+        open my $fh, '<', \$fat
+          or die "FatPacker error loading $_[1] (could be a perl installation issue?)";
         return $fh;
       }
       return
@@ -182,7 +183,7 @@ sub script_command_file {
   my @segments = map {
     (my $stub = $_) =~ s/\.pm$//;
     my $name = uc join '_', split '/', $stub;
-    my $data = $files{$_}; $data =~ s/^/  /mg;
+    my $data = $files{$_}; $data =~ s/^/  /mg; $data =~ s/(?<!\n)\z/\n/;
     '$fatpacked{'.perlstring($_).qq!} = <<'${name}';\n!
     .qq!${data}${name}\n!;
   } sort keys %files;
