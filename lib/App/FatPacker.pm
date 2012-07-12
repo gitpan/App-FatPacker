@@ -13,18 +13,18 @@ use File::Copy qw(copy);
 use File::Path qw(mkpath rmtree);
 use B qw(perlstring);
 
-our $VERSION = '0.009006'; # 0.9.6
+our $VERSION = '0.009007'; # 0.9.7
 
 $VERSION = eval $VERSION;
 
-my $option_parser = Getopt::Long::Parser->new(
-  config => [ qw(require_order pass_through bundling no_auto_abbrev) ]
-);
-
 sub call_parser {
-  local *ARGV = [ @{$_[0]} ];
-  $option_parser->getoptions(@{$_[1]});
-  [ @ARGV ];
+  my $self = shift;
+  my ($args, $options) = @_;
+
+  local *ARGV = [ @{$args} ];
+  $self->{option_parser}->getoptions(@$options);
+
+  return [ @ARGV ];
 }
 
 sub lines_of {
@@ -38,16 +38,23 @@ sub stripspace {
 }
 
 sub import {
-  $_[1] eq '-run_script'
+  $_[1] && $_[1] eq '-run_script'
     and return shift->new->run_script;
 }
 
-sub new { bless({}, $_[0]) }
+sub new {
+  bless {
+    option_parser => Getopt::Long::Parser->new(
+      config => [ qw(require_order pass_through bundling no_auto_abbrev) ]
+    ),
+  }, $_[0];
+}
 
 sub run_script {
   my ($self, $args) = @_;
   my @args = $args ? @$args : @ARGV;
   (my $cmd = shift @args || 'help') =~ s/-/_/g;
+
   if (my $meth = $self->can("script_command_${cmd}")) {
     $self->$meth(\@args);
   } else {
@@ -61,30 +68,58 @@ sub script_command_help {
 
 sub script_command_trace {
   my ($self, $args) = @_;
-  
-  $args = call_parser $args => [
+
+  $args = $self->call_parser($args => [
     'to=s' => \my $file,
     'to-stderr' => \my $to_stderr,
-  ];
+    'use=s' => \my @additional_use
+  ]);
 
   die "Can't use to and to-stderr on same call" if $file && $to_stderr;
 
-  (my $use_file = $file) ||= 'fatpacker.trace';
-  if (!$to_stderr and -e $use_file) {
-    unlink $use_file or die "Couldn't remove old trace file: $!";
+  $file ||= 'fatpacker.trace';
+
+  if (!$to_stderr and -e $file) {
+    unlink $file or die "Couldn't remove old trace file: $!";
   }
   my $arg = do {
-    if ($file) {
-      "=>>${file}"
-    } elsif ($to_stderr) {
-      "=>&STDERR"
-    } else {
-      ""
+    if ($to_stderr) {
+      "=&STDERR"
+    } elsif ($file) {
+      ">>${file}"
     }
   };
-  {
-    local $ENV{PERL5OPT} = '-MApp::FatPacker::Trace'.$arg;
-    system $^X, @$args;
+
+  $self->trace(
+    use => \@additional_use,
+    args => $args,
+    output => $arg,
+  );
+}
+
+sub trace {
+  my ($self, %opts) = @_;
+
+  my $capture;
+
+  my $output = $opts{output} || do {
+    $capture++; '>&STDOUT'
+  };
+
+  my $trace_opts = join ',', $output||'>&STDOUT', @{$opts{use}||[]};
+
+  local $ENV{PERL5OPT} = '-MApp::FatPacker::Trace='.$trace_opts;
+
+  my @args = @{$opts{args}||[]};
+
+  if ($output) {
+    # user specified output target, JFDI
+    system $^X, @args;
+    return;
+  } else {
+    # no output target specified, slurp
+    open my $out_fh, '-|', $^X, @args;
+    return do { local $/; <$out_fh> };
   }
 }
 
@@ -203,7 +238,7 @@ App::FatPacker - pack your dependencies onto your script file
 
 See the documentation for the L<fatpack> script itself for more information.
 
-The programmatic API for this code is not yet fully decided, hence the 0.9.1
+The programmatic API for this code is not yet fully decided, hence the 0.9
 release version. Expect that to be cleaned up for 1.0.
 
 =head1 SUPPORT
@@ -233,3 +268,4 @@ as perl itself.
 =cut
 
 1;
+

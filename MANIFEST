@@ -19,4 +19,5 @@ t/mod/a.pm
 t/mod/b.pm
 t/mod/c.pm
 t/mod/cond.pm
+t/pack.t
 t/trace.t
