@@ -13,7 +13,7 @@ use File::Copy qw(copy);
 use File::Path qw(mkpath rmtree);
 use B qw(perlstring);
 
-our $VERSION = '0.009007'; # 0.9.7
+our $VERSION = '0.009008'; # 0.9.8
 
 $VERSION = eval $VERSION;
 
@@ -133,7 +133,9 @@ sub script_command_packlists_for {
 sub packlists_containing {
   my ($self, $targets) = @_;
   my @targets = @$targets;
-  require $_ for @targets;
+  foreach my $t (@targets) {
+    require $t;
+  }
   my @search = grep -d $_, map catdir($_, 'auto'), @INC;
   my %pack_rev;
   my $cwd = cwd;
