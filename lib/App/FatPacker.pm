@@ -9,11 +9,12 @@ use File::Find qw(find);
 use File::Spec::Functions qw(
   catdir splitpath splitdir catpath rel2abs abs2rel
 );
+use File::Spec::Unix;
 use File::Copy qw(copy);
 use File::Path qw(mkpath rmtree);
 use B qw(perlstring);
 
-our $VERSION = '0.009009'; # 0.9.9
+our $VERSION = '0.009010'; # 0.9.10
 
 $VERSION = eval $VERSION;
 
@@ -192,9 +193,10 @@ sub script_command_file {
     find(sub {
       return unless -f $_;
       !/\.pm$/ and warn "File ${File::Find::name} isn't a .pm file - can't pack this and if you hoped we were going to things may not be what you expected later\n" and return;
-      $files{abs2rel($File::Find::name,$dir)} = do {
+      $files{File::Spec::Unix->abs2rel($File::Find::name,$dir)} = do {
         local (@ARGV, $/) = ($File::Find::name); <>
       };
+      close ARGV;
     }, $dir);
   }
   my $start = stripspace <<'  END_START';
@@ -227,6 +229,8 @@ sub script_command_file {
   print join "\n", $start, @segments, $end;
 }
 
+=encoding UTF-8
+
 =head1 NAME
 
 App::FatPacker - pack your dependencies onto your script file
@@ -254,7 +258,23 @@ Matt S. Trout (mst) <mst@shadowcat.co.uk>
 
 =head2 CONTRIBUTORS
 
-None as yet, though I probably owe lots of people thanks for ideas. Yet
+miyagawa - Tatsuhiko Miyagawa (cpan:MIYAGAWA) <miyagawa@bulknews.net>
+
+tokuhirom - MATSUNO★Tokuhiro (cpan:TOKUHIROM) <tokuhirom@gmail.com>
+
+dg - David Leadbeater (cpan:DGL) <dgl@dgl.cx>
+
+gugod - 劉康民 (cpan:GUGOD) <gugod@cpan.org>
+
+t0m - Tomas Doran (cpan:BOBTFISH) <bobtfish@bobtfish.net>
+
+sawyer - Sawyer X (cpan:XSAWYERX) <xsawyerx@cpan.org>
+
+ether - Karen Etheridge (cpan:ETHER) <ether@cpan.org>
+
+Mithaldu - Christian Walde (cpan:MITHALDU) <walde.christian@googlemail.com>
+
+Many more people are probably owed thanks for ideas. Yet
 another doc nit to fix.
 
 =head1 COPYRIGHT
