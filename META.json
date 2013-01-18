@@ -4,7 +4,7 @@
       "mst - Matt S. Trout (cpan:MSTROUT) <mst@shadowcat.co.uk>"
    ],
    "dynamic_config" : 1,
-   "generated_by" : "ExtUtils::MakeMaker version 6.6302, CPAN::Meta::Converter version 2.120921",
+   "generated_by" : "ExtUtils::MakeMaker version 6.64, CPAN::Meta::Converter version 2.120921",
    "license" : [
       "perl_5"
    ],
@@ -31,7 +31,9 @@
          }
       },
       "runtime" : {
-         "requires" : {}
+         "requires" : {
+            "perl" : "0"
+         }
       }
    },
    "release_status" : "stable",
@@ -41,5 +43,5 @@
          "url" : "git://git.shadowcat.co.uk/p5sagit/App-FatPacker.git"
       }
    },
-   "version" : "0.009011"
+   "version" : "0.009012"
 }

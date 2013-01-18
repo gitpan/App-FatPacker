@@ -2,7 +2,6 @@ package App::FatPacker;
 
 use strict;
 use warnings FATAL => 'all';
-use 5.008001;
 use Getopt::Long;
 use Cwd qw(cwd);
 use File::Find qw(find);
@@ -14,7 +13,7 @@ use File::Copy qw(copy);
 use File::Path qw(mkpath rmtree);
 use B qw(perlstring);
 
-our $VERSION = '0.009011'; # 0.9.11
+our $VERSION = '0.009012'; # 0.9.012
 
 $VERSION = eval $VERSION;
 
@@ -210,6 +209,14 @@ sub script_command_file {
 
     unshift @INC, sub {
       if (my $fat = $fatpacked{$_[1]}) {
+        if ($] < 5.008) {
+          return sub {
+            return 0 unless length $fat;
+            $text =~ s/^([^\n]*\n?)//;
+            $_ = $1;
+            return 1;
+          };
+        }
         open my $fh, '<', \$fat
           or die "FatPacker error loading $_[1] (could be a perl installation issue?)";
         return $fh;
