@@ -14,7 +14,7 @@ use File::Copy qw(copy);
 use File::Path qw(mkpath rmtree);
 use B qw(perlstring);
 
-our $VERSION = '0.009013'; # 0.9.013
+our $VERSION = '0.009014'; # 0.009.014
 
 $VERSION = eval $VERSION;
 
@@ -187,7 +187,7 @@ sub script_command_file {
   my ($self, $args) = @_;
   my $file = shift @$args;
   my $cwd = cwd;
-  my @dirs = map rel2abs($_, $cwd), ('lib','fatlib');
+  my @dirs = grep -d, map rel2abs($_, $cwd), ('lib','fatlib');
   my %files;
   foreach my $dir (@dirs) {
     find(sub {
@@ -248,12 +248,19 @@ App::FatPacker - pack your dependencies onto your script file
   $ fatpack trace myscript.pl
   $ fatpack packlists-for `cat fatpacker.trace` >packlists
   $ fatpack tree `cat packlists`
-  $ (fatpack file; cat myscript.pl) >myscript.packed.pl
+  $ (head -n1 myscript.pl |grep '^#!'; fatpack file; cat myscript.pl) >myscript.packed.pl
+
+The C<head -n1 myscript.pl |grep '^#!'> code pulls out the Unix shebang
+line, if there is one, and injects it at the start of the packed script.
 
 See the documentation for the L<fatpack> script itself for more information.
 
 The programmatic API for this code is not yet fully decided, hence the 0.9
 release version. Expect that to be cleaned up for 1.0.
+
+=head1 SEE ALSO
+
+L<article for Perl Advent 2012|http://www.perladvent.org/2012/2012-12-14.html>
 
 =head1 SUPPORT
 

@@ -5,13 +5,20 @@ SYNOPSIS
       $ fatpack trace myscript.pl
       $ fatpack packlists-for `cat fatpacker.trace` >packlists
       $ fatpack tree `cat packlists`
-      $ (fatpack file; cat myscript.pl) >myscript.packed.pl
+      $ (head -n1 myscript.pl |grep '^#!'; fatpack file; cat myscript.pl) >myscript.packed.pl
+
+    The "head -n1 myscript.pl |grep '^#!'" code pulls out the Unix shebang
+    line, if there is one, and injects it at the start of the packed script.
 
     See the documentation for the fatpack script itself for more
     information.
 
     The programmatic API for this code is not yet fully decided, hence the
     0.9 release version. Expect that to be cleaned up for 1.0.
+
+SEE ALSO
+    article for Perl Advent 2012
+    <http://www.perladvent.org/2012/2012-12-14.html>
 
 SUPPORT
     Your current best avenue is to come annoy annoy mst on #toolchain on
