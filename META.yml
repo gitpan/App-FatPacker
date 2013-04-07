@@ -22,4 +22,4 @@ requires:
 resources:
   homepage: http://git.shadowcat.co.uk/gitweb/gitweb.cgi?p=p5sagit/App-FatPacker.git
   repository: git://git.shadowcat.co.uk/p5sagit/App-FatPacker.git
-version: 0.009015
+version: 0.009016
