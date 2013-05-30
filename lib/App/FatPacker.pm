@@ -14,7 +14,7 @@ use File::Copy qw(copy);
 use File::Path qw(mkpath rmtree);
 use B qw(perlstring);
 
-our $VERSION = '0.009016'; # 0.009.016
+our $VERSION = '0.009017'; # 0.009.017
 
 $VERSION = eval $VERSION;
 
@@ -127,7 +127,7 @@ sub trace {
     return;
   } else {
     # no output target specified, slurp
-    open my $out_fh, '-|', $^X, @args;
+    open my $out_fh, "$^X @args |";
     return do { local $/; <$out_fh> };
   }
 }
@@ -205,7 +205,7 @@ sub fatpack_file {
   foreach my $dir (@dirs) {
     find(sub {
       return unless -f $_;
-      !/\.pm$/ and warn "File ${File::Find::name} isn't a .pm file - can't pack this and if you hoped we were going to things may not be what you expected later\n" and return;
+      !/\.pm$/ and warn "File ${File::Find::name} isn't a .pm file - can't pack this -- if you hoped we were going to, things may not be what you expected later\n" and return;
       $files{File::Spec::Unix->abs2rel($File::Find::name,$dir)} = do {
         local (@ARGV, $/) = ($File::Find::name); <>
       };
