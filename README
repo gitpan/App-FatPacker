@@ -15,7 +15,7 @@ SYNOPSIS
     information.
 
     The programmatic API for this code is not yet fully decided, hence the
-    0.9 release version. Expect that to be cleaned up for 1.0.
+    0.x release version. Expect that to be cleaned up for 1.0.
 
 SEE ALSO
     article for Perl Advent 2012
@@ -45,6 +45,12 @@ AUTHOR
 
     Mithaldu - Christian Walde (cpan:MITHALDU)
     <walde.christian@googlemail.com>
+
+    dolmen - Olivier Mengué (cpan:DOLMEN) <dolmen@cpan.org>
+
+    djerius - Diab Jerius (cpan:DJERIUS) <djerius@cpan.org>
+
+    haarg - Graham Knop (cpan:HAARG> <haarg@haarg.org>
 
     Many more people are probably owed thanks for ideas. Yet another doc nit
     to fix.

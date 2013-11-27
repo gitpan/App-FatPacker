@@ -4,7 +4,7 @@
       "mst - Matt S. Trout (cpan:MSTROUT) <mst@shadowcat.co.uk>"
    ],
    "dynamic_config" : 1,
-   "generated_by" : "ExtUtils::MakeMaker version 6.72, CPAN::Meta::Converter version 2.131560",
+   "generated_by" : "ExtUtils::MakeMaker version 6.82, CPAN::Meta::Converter version 2.132830",
    "license" : [
       "perl_5"
    ],
@@ -24,24 +24,19 @@
          "requires" : {
             "ExtUtils::MakeMaker" : "0"
          }
-      },
-      "configure" : {
-         "requires" : {
-            "ExtUtils::MakeMaker" : "0"
-         }
-      },
-      "runtime" : {
-         "requires" : {
-            "perl" : "5.008000"
-         }
       }
    },
    "release_status" : "stable",
    "resources" : {
-      "homepage" : "http://git.shadowcat.co.uk/gitweb/gitweb.cgi?p=p5sagit/App-FatPacker.git",
+      "bugtracker" : {
+         "mailto" : "bug-App-FatPacker-Metadata@rt.cpan.org",
+         "web" : "https://rt.cpan.org/Public/Dist/Display.html?Name=App-FatPacker"
+      },
       "repository" : {
-         "url" : "git://git.shadowcat.co.uk/p5sagit/App-FatPacker.git"
+         "type" : "git",
+         "url" : "git://git.shadowcat.co.uk/p5sagit/App-FatPacker.git",
+         "web" : "http://git.shadowcat.co.uk/gitweb/gitweb.cgi?p=p5sagit/App-FatPacker.git"
       }
    },
-   "version" : "0.009018"
+   "version" : "0.010000"
 }

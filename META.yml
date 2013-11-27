@@ -4,10 +4,8 @@ author:
   - 'mst - Matt S. Trout (cpan:MSTROUT) <mst@shadowcat.co.uk>'
 build_requires:
   ExtUtils::MakeMaker: 0
-configure_requires:
-  ExtUtils::MakeMaker: 0
 dynamic_config: 1
-generated_by: 'ExtUtils::MakeMaker version 6.72, CPAN::Meta::Converter version 2.131560'
+generated_by: 'ExtUtils::MakeMaker version 6.82, CPAN::Meta::Converter version 2.132830'
 license: perl
 meta-spec:
   url: http://module-build.sourceforge.net/META-spec-v1.4.html
@@ -17,9 +15,7 @@ no_index:
   directory:
     - t
     - inc
-requires:
-  perl: 5.008000
 resources:
-  homepage: http://git.shadowcat.co.uk/gitweb/gitweb.cgi?p=p5sagit/App-FatPacker.git
+  bugtracker: https://rt.cpan.org/Public/Dist/Display.html?Name=App-FatPacker
   repository: git://git.shadowcat.co.uk/p5sagit/App-FatPacker.git
-version: 0.009018
+version: 0.010000
