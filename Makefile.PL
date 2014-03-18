@@ -14,6 +14,7 @@ WriteMakefile(
 
   META_MERGE => {
     'meta-spec' => { version => '2' },
+    dynamic_config => 0,
     resources => {
       # r/w: p5sagit@git.shadowcat.co.uk:App-FatPacker.git
       repository => {
@@ -27,7 +28,7 @@ WriteMakefile(
       },
     },
     requires => {
-        # B::perlstring was added in 5.8.0
+        # B::perlstring was added in B 1.01 (perl 5.8.0)
         perl => '5.008000',
     },
   },

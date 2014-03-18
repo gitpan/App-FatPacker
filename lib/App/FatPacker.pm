@@ -14,7 +14,7 @@ use File::Copy qw(copy);
 use File::Path qw(mkpath rmtree);
 use B qw(perlstring);
 
-our $VERSION = '0.010000'; # 0.10.0
+our $VERSION = '0.010001'; # 0.10.1
 
 $VERSION = eval $VERSION;
 
@@ -117,7 +117,8 @@ sub trace {
   my $output = $opts{output};
   my $trace_opts = join ',', $output||'>&STDOUT', @{$opts{use}||[]};
 
-  local $ENV{PERL5OPT} = '-MApp::FatPacker::Trace='.$trace_opts;
+  local $ENV{PERL5OPT} = join ' ',
+    ($ENV{PERL5OPT}||()), '-MApp::FatPacker::Trace='.$trace_opts;
 
   my @args = @{$opts{args}||[]};
 
@@ -142,8 +143,11 @@ sub script_command_packlists_for {
 sub packlists_containing {
   my ($self, $targets) = @_;
   my @targets = @$targets;
-  foreach my $t (@targets) {
-    require $t;
+  {
+    local @INC = ('lib', @INC);
+    foreach my $t (@targets) {
+      require $t;
+    }
   }
   my @search = grep -d $_, map catdir($_, 'auto'), @INC;
   my %pack_rev;
@@ -343,7 +347,7 @@ L<article for Perl Advent 2012|http://www.perladvent.org/2012/2012-12-14.html>
 
 =head1 SUPPORT
 
-Your current best avenue is to come annoy annoy mst on #toolchain on
+Your current best avenue is to come annoy mst on #toolchain on
 irc.perl.org. There should be a non-IRC means of support by 1.0.
 
 =head1 AUTHOR
