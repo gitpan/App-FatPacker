@@ -1,5 +1,8 @@
 Revision history for App-FatPacker
 
+0.010002 - 2014-08-16
+  - correctly specify perl prerequisite of 5.8 in meta files
+
 0.010001 - 2014-03-18
   - include 'lib' in @INC for packlists_containing's require() calls
 
